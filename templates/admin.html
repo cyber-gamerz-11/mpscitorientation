@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Panel — Mohammadpur Preparatory School & College IT Club</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar" style="justify-content: space-between;">
+        <a href="/" class="nav-brand">
+            <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="MPSC IT Club Logo" class="nav-logo-img">
+        </a>
+        <div>
+            <a href="/" class="btn-outline">View Portal &rarr;</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <!-- Login Section -->
+        <div id="loginSection" style="max-width: 420px; margin: 3rem auto;">
+            <div class="glass-card" style="text-align:center;">
+                <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="MPSC IT Club Logo" style="height:55px; margin-bottom:1rem;">
+                <h2 class="gradient-text" style="margin: 0.5rem 0;">Admin Passcode</h2>
+                <p class="text-muted" style="font-size:0.85rem; margin-bottom:1.5rem;">Enter the administrator key to manage questions and view orientation leaderboard results.</p>
+                <form onsubmit="handleAdminLogin(event)">
+                    <div class="form-group">
+                        <input type="password" id="adminPasscode" class="form-control" placeholder="Enter Secret Passcode" required>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width:100%;">Authenticate &rarr;</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Authenticated Dashboard -->
+        <div id="adminDashboard" style="display:none;">
+
+            <div class="tab-nav">
+                <button class="tab-btn active" onclick="switchTab('tabLeaderboard')">Live Leaderboard & Registrations</button>
+                <button class="tab-btn" onclick="switchTab('tabAddQuiz')">IT MCQ Questions</button>
+                <button class="tab-btn" onclick="switchTab('tabAddLogo')">Logo Challenges</button>
+                <button class="tab-btn" onclick="switchTab('tabSettings')">System Settings</button>
+            </div>
+
+            <!-- Tab 1: Leaderboard -->
+            <div id="tabLeaderboard" class="tab-content active">
+                <div class="glass-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3>Orientation Participants & Scores</h3>
+                        <button class="btn-outline" onclick="loadAdminData()">Refresh</button>
+                    </div>
+                    <div class="admin-table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Participant Name</th>
+                                    <th>Institute</th>
+                                    <th>Status / Game</th>
+                                    <th>Score</th>
+                                    <th>Security Code</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardBody">
+                                <!-- Leaderboard records populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Add Quiz Question -->
+            <div id="tabAddQuiz" class="tab-content">
+                <div class="glass-card" style="max-width: 650px; margin: 0 auto;">
+                    <h3>Add IT MCQ Question</h3>
+                    <form id="addQuizForm" onsubmit="handleAddQuiz(event)" style="margin-top:1.5rem;">
+                        <div class="form-group">
+                            <label>Question Title</label>
+                            <input type="text" id="qTitle" class="form-control" placeholder="e.g. What does CPU stand for?" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Option A</label>
+                            <input type="text" id="qOptA" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Option B</label>
+                            <input type="text" id="qOptB" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Option C</label>
+                            <input type="text" id="qOptC" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Option D</label>
+                            <input type="text" id="qOptD" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Correct Option</label>
+                            <select id="qCorrect" class="form-control" required>
+                                <option value="A">Option A</option>
+                                <option value="B">Option B</option>
+                                <option value="C">Option C</option>
+                                <option value="D">Option D</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width:100%;">Save Question &rarr;</button>
+                    </form>
+
+                    <!-- Existing Questions List -->
+                    <div id="existingQuizContainer"></div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Add Logo Question with Direct File Uploads -->
+            <div id="tabAddLogo" class="tab-content">
+                <div class="glass-card" style="max-width: 650px; margin: 0 auto;">
+                    <h3>Add Dual Logo Challenge</h3>
+                    <form id="addLogoForm" onsubmit="handleAddLogo(event)" style="margin-top:1.5rem;" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Target Prompt</label>
+                            <input type="text" id="lPrompt" class="form-control" placeholder="e.g. Which is the official Python logo?" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Logo A Image File</label>
+                            <input type="file" id="lLogoAFile" class="form-control" accept="image/*" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Logo B Image File</label>
+                            <input type="file" id="lLogoBFile" class="form-control" accept="image/*" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Correct Logo Choice</label>
+                            <select id="lCorrect" class="form-control" required>
+                                <option value="A">Logo A</option>
+                                <option value="B">Logo B</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width:100%;">Upload Logo Challenge &rarr;</button>
+                    </form>
+
+                    <!-- Existing Logo Challenges List -->
+                    <div id="existingLogoContainer"></div>
+                </div>
+            </div>
+
+            <!-- Tab 4: System Settings -->
+            <div id="tabSettings" class="tab-content">
+                <div class="glass-card" style="max-width: 500px; margin: 0 auto;">
+                    <h3>Game & Prize Configurations</h3>
+                    <form onsubmit="handleSaveSettings(event)" style="margin-top:1.5rem;">
+                        <div class="form-group">
+                            <label>IT Quiz Countdown Duration (Seconds)</label>
+                            <input type="number" id="cfgQuizTimer" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Logo Quiz Countdown Duration (Seconds)</label>
+                            <input type="number" id="cfgLogoTimer" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Minimum Score Required for Gift/Prize</label>
+                            <input type="number" id="cfgMinScore" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn-primary" style="width:100%;">Update Settings &rarr;</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

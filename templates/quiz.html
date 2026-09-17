@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Quiz Challenge — Mohammadpur Preparatory School & College</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar" style="justify-content: space-between;">
+        <a href="/" class="nav-brand">
+            <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="MPSC IT Club Logo" class="nav-logo-img">
+        </a>
+        <div class="timer-box" id="timerBox">
+            <span id="timerText">45s</span>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="glass-card" style="max-width: 650px; margin: 1.5rem auto 0 auto;">
+            <div class="quiz-header">
+                <span class="nav-badge" id="qNumber">Question 1 / 5</span>
+                <span class="text-mint" style="font-size:0.85rem; font-weight:700;">+10 PTS / CORRECT</span>
+            </div>
+
+            <h2 id="qText" style="font-size: 1.35rem; font-weight:700; min-height: 70px; display:flex; align-items:center;">
+                Loading Question...
+            </h2>
+
+            <div class="options-grid" id="optionsContainer">
+                <!-- MCQ Option buttons dynamically injected -->
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initQuizGame();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The Logo — Mohammadpur Preparatory School & College</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar" style="justify-content: space-between;">
+        <a href="/" class="nav-brand">
+            <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="MPSC IT Club Logo" class="nav-logo-img">
+        </a>
+        <div class="timer-box" id="logoTimerBox">
+            <span id="logoTimerText">30s</span>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="glass-card" style="max-width: 650px; margin: 1.5rem auto 0 auto; text-align:center;">
+            <div class="quiz-header">
+                <span class="nav-badge" id="logoQNumber">Challenge 1 / 4</span>
+                <span class="text-mint" style="font-size:0.85rem; font-weight:700;">+10 PTS / CORRECT</span>
+            </div>
+
+            <h2 id="logoPrompt" class="gradient-text" style="font-size: 1.4rem; font-weight:800; min-height: 60px;">
+                Which one is the official logo?
+            </h2>
+
+            <div class="logo-comparison-grid" id="logoGrid">
+                <!-- Dual logo selection cards injected dynamically -->
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initLogoGame();
+        });
+    </script>
+</body>
+</html>

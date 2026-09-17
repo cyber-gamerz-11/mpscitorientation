@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orientation Challenge — Mohammadpur Preparatory School & College IT Club</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <!-- Header Navbar displaying highlighted Club Logo only -->
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="MPSC IT Club Logo" class="nav-logo-img">
+        </a>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container" style="text-align: center; margin-top: 1rem;">
+        
+        <div style="margin-bottom: 2.5rem;">
+            <p class="text-mint" style="font-weight:700; text-transform:uppercase; letter-spacing:2px; font-size:0.85rem;">Mohammadpur Preparatory School & College</p>
+            <h1 class="gradient-text" style="font-size: 2.2rem; margin: 0.5rem 0 1rem 0; font-weight:900;">Orientation Challenge Hub</h1>
+            <p class="text-muted" style="max-width: 600px; margin: 0 auto; font-size: 1rem;">
+                Test your tech knowledge, score top points, and claim gifts from the Executive Committee. Select a challenge below to begin.
+            </p>
+        </div>
+
+        <!-- Game Selector Grid -->
+        <div class="game-grid">
+            <div class="game-card" onclick="startGame('mcq')">
+                <h3 class="gradient-text" style="font-size:1.4rem; margin-bottom:0.75rem;">IT Quiz Challenge</h3>
+                <p class="text-muted" style="font-size:0.9rem;">Speed test your computer science, logic, and web technology MCQ skills under time pressure.</p>
+                <button class="btn-primary" style="margin-top: 1.8rem; width:100%;">Play IT Quiz &rarr;</button>
+            </div>
+
+            <div class="game-card" onclick="startGame('logo')">
+                <h3 class="gradient-text" style="font-size:1.4rem; margin-bottom:0.75rem;">Guess The Logo</h3>
+                <p class="text-muted" style="font-size:0.9rem;">Identify the correct technology, programming language, and framework logos side-by-side.</p>
+                <button class="btn-primary" style="margin-top: 1.8rem; width:100%;">Play Logo Challenge &rarr;</button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Onboarding Modal Popup for Name & Institute -->
+    <div class="modal-overlay" id="onboardingModal">
+        <div class="modal-card" style="text-align:center;">
+            <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="MPSC IT Club Logo" style="height:55px; margin-bottom:1rem; filter: drop-shadow(0 0 10px var(--glow-green));">
+            <h2 class="gradient-text" style="font-size:1.5rem; margin-bottom:0.5rem;">Participant Registration</h2>
+            <p class="text-muted" style="font-size:0.85rem; margin-bottom:1.5rem;">
+                Enter your details to register for the Mohammadpur Preparatory School & College IT Club Challenge. Each participant can attempt <strong>ONLY ONCE</strong>.
+            </p>
+
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="participantName">Full Name</label>
+                    <input type="text" id="participantName" class="form-control" placeholder="e.g. Tanvir Rahman" required>
+                </div>
+                <div class="form-group">
+                    <label for="participantInstitute">School / College / Institute</label>
+                    <input type="text" id="participantInstitute" class="form-control" value="Mohammadpur Preparatory School & College" required>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width:100%; margin-top:0.5rem;">Register & Begin &rarr;</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verified Score Card — Mohammadpur Preparatory School & College</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="/" class="nav-brand">
+            <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="MPSC IT Club Logo" class="nav-logo-img">
+        </a>
+    </nav>
+
+    <main class="container" style="max-width: 580px;">
+        
+        <div class="lockout-banner" style="text-align:center;">
+            <strong>System Security Active</strong>
+            <p style="font-size:0.85rem; margin-top:0.2rem;">Your orientation attempt has been recorded in the database. Multiple attempts are disabled.</p>
+        </div>
+
+        <!-- Verified Cyber Certificate Card -->
+        <div class="certificate-card">
+            <img src="{{ url_for('static', filename='assets/images/logo.png') }}" alt="MPSC IT Club Logo" style="height:65px; margin-bottom:1rem; filter: drop-shadow(0 0 10px var(--glow-green));">
+            <div class="badge-gold">VERIFIED PARTICIPANT</div>
+            
+            <h2 id="resName" class="gradient-text" style="font-size:1.9rem; font-weight:900;">Participant Name</h2>
+            <p id="resInstitute" class="text-muted" style="font-size:1rem; margin-top:0.2rem;">Mohammadpur Preparatory School & College</p>
+
+            <div class="score-display" id="resScore">0 PTS</div>
+            <p style="text-transform:uppercase; letter-spacing:2px; font-weight:700; color:var(--soft-gray); font-size:0.8rem;">Total Verified Points</p>
+
+            <div class="claim-banner" id="resClaimBanner">
+                <h3 class="text-mint">VERIFICATION COMPLETE</h3>
+                <p>Show this screen to an <strong>Executive Committee (EC) Member</strong> at the booth!</p>
+            </div>
+
+            <div style="background:rgba(0,0,0,0.4); border:1px solid var(--glass-border); padding:0.8rem 1.2rem; border-radius:12px; margin-top:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.8rem; color:var(--soft-gray);">Security Hash Code:</span>
+                <code id="resCode" style="font-weight:800; color:var(--emerald-green); font-size:1rem; letter-spacing:1px;">MPSC-XXXXXX</code>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderResultPage();
+        });
+    </script>
+</body>
+</html>
