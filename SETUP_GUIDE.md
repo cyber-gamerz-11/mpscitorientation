@@ -1,88 +1,48 @@
 ﻿# MPSC IT CLUB — Orientation Challenge Web App Guide
 
-> **Project:** MPSC IT Club Orientation Event Portal  
+> **Project:** Mohammadpur Preparatory School & College IT Club  
 > **Tech Stack:** Python (Flask) · Supabase (PostgreSQL) · HTML5/CSS3/JS · Render Hosting  
 
 ---
 
-## 🌟 Overview & Key Features
+## 🛠️ Fix for Render Error: `ModuleNotFoundError: No module named 'app'`
 
-1. **Branded Aesthetics**: Cloned design system from `mpscitclub.onrender.com` featuring Pine Green (`#0f3534`), Glowing Mint (`#00f5b4`), Dark Jade (`#051413`), glassmorphism cards, and responsive mobile-first UI.
-2. **Onboarding & Anti-Cheat Lockout**:
-   - Participants scan a QR code at the orientation booth.
-   - Enter **Name** and **Institute**.
-   - Triple-layer browser fingerprinting locks the device UUID so each participant can attempt the challenge **ONLY ONCE**.
-   - If they reload or scan again, the system immediately redirects to their verified score card with "Lockout Active".
-3. **2 Interactive Games**:
-   - **IT Quiz (MCQ)**: Speed-test tech MCQ questions under a countdown timer.
-   - **Guess The Logo**: Side-by-side logo selector under a countdown timer.
-4. **Verified Score Certificate & EC Member Claim**:
-   - Generates a verified score card with a unique security code (`MPSC-XXXXXX`).
-   - If score is $\ge$ prize threshold, displays "PRIZE ELIGIBLE - Show to EC Member"!
-5. **Restricted Admin Dashboard (`/admin`)**:
-   - Protected by admin passcode (`mpsc@admin2026`).
-   - Live Leaderboard & Submissions.
-   - Add/Delete IT MCQ questions and Logo challenges.
-   - Configure timer durations and prize score thresholds.
-   - Reset individual participant lockouts if an EC member wants to allow a replay.
+If Render shows `ModuleNotFoundError: No module named 'app'`, follow these 2 quick fixes:
 
----
+### Fix 1: Set Root Directory in Render Settings
+If your GitHub repo contains a subfolder named `mpsc Orientation`:
+1. Go to your Render Dashboard -> Select your Web Service -> **Settings**.
+2. Scroll to **Root Directory**.
+3. Set **Root Directory** to: `mpsc Orientation` (or the folder name containing `app.py`).
+4. Click **Save Changes** and re-deploy.
 
-## 🚀 Quick Local Setup
-
-1. **Install Dependencies**:
+### Fix 2: Set Start Command & PYTHONPATH
+1. In Render Web Service settings, set **Start Command** to:
    ```bash
-   pip install -r requirements.txt
+   gunicorn --pythonpath . app:app
    ```
-
-2. **Run Flask Application**:
-   ```bash
-   python app.py
-   ```
-   Open your browser at `http://127.0.0.1:5000`.
+2. Under **Environment Variables**, add:
+   - **Key:** `PYTHONPATH`
+   - **Value:** `.`
 
 ---
 
-## 🗄️ Supabase Database Setup (1-Minute Setup)
+## ☁️ Deploying to Render (Step-by-Step)
 
-1. Create a free project at [Supabase.com](https://supabase.com).
-2. Go to the **SQL Editor** in your Supabase project dashboard.
-3. Open `schema.sql` from this repository, copy all SQL lines, paste them into the SQL Editor, and click **Run**.
-4. Go to **Project Settings -> API** and copy:
-   - **Project URL** (`SUPABASE_URL`)
-   - **anon / public key** (`SUPABASE_KEY`)
-
----
-
-## ☁️ Deploying to Render.com (Free Hosting)
-
-1. Create a GitHub repository and push this codebase to GitHub:
+1. Push this repository to GitHub:
    ```bash
-   git init
    git add .
-   git commit -m "Initial commit for MPSC IT Club Orientation Web"
-   git branch -M main
-   git remote add origin https://github.com/YOUR_USERNAME/mpsc-orientation.git
-   git push -u origin main
+   git commit -m "Fix Render deploy settings"
+   git push origin main
    ```
-2. Log into [Render Dashboard](https://dashboard.render.com).
-3. Click **New + -> Web Service**.
-4. Connect your GitHub repository.
-5. Configure the web service:
-   - **Runtime**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
-6. Under **Environment Variables**, add:
-   - `SECRET_KEY` = `mpsc-orientation-secret-2026`
-   - `ADMIN_PASSCODE` = `mpsc@admin2026`
-   - `SUPABASE_URL` = `https://your-supabase-project.supabase.co`
-   - `SUPABASE_KEY` = `your-supabase-anon-key`
-7. Click **Create Web Service**. Your orientation site is now live!
+2. In [Render Dashboard](https://dashboard.render.com):
+   - **Build Command:** `pip install -r requirements.txt`
+   - **Start Command:** `gunicorn --pythonpath . app:app`
+   - **Environment Variables:**
+     - `PYTHONPATH` = `.`
+     - `SECRET_KEY` = `mpsc-orientation-secret-2026`
+     - `ADMIN_PASSCODE` = `mpsc@admin2026`
+     - `SUPABASE_URL` = `https://tepaqxpmydwjilhlqwyx.supabase.co`
+     - `SUPABASE_KEY` = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlcGFxeHBteWR3amlsaGxxd3l4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2NDAxMjEsImV4cCI6MjEwNTIxNjEyMX0.pajXz4LD1taQIFPWJ5vwag6jOrrTOxrmyGgfPcnhB1g`
 
----
-
-## 📲 Creating the QR Code for the Booth
-
-1. Copy your live Render site URL (e.g. `https://mpsc-orientation.onrender.com`).
-2. Generate a QR code using any QR generator (e.g. [qr-code-generator.com](https://www.qr-code-generator.com/)).
-3. Print or display the QR code at your orientation stall for students to scan!
+3. Click **Manual Deploy -> Deploy latest commit**.
