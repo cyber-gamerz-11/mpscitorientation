@@ -94,7 +94,7 @@ def register():
 
 @app.route('/api/quiz-questions', methods=['GET'])
 def get_quiz_questions():
-    questions = db.get_quiz_questions()
+    questions = db.get_quiz_questions(limit=10)
     settings = db.get_settings()
     return jsonify({
         "questions": questions,
@@ -103,7 +103,7 @@ def get_quiz_questions():
 
 @app.route('/api/logo-questions', methods=['GET'])
 def get_logo_questions():
-    questions = db.get_logo_questions()
+    questions = db.get_logo_questions(limit=10)
     settings = db.get_settings()
     return jsonify({
         "questions": questions,
@@ -157,8 +157,8 @@ def admin_logout():
 def admin_leaderboard():
     leaderboard = db.get_leaderboard()
     settings = db.get_settings()
-    quiz_questions = db.get_quiz_questions()
-    logo_questions = db.get_logo_questions()
+    quiz_questions = db.get_quiz_questions(limit=None)
+    logo_questions = db.get_logo_questions(limit=None)
     return jsonify({
         "leaderboard": leaderboard,
         "settings": settings,

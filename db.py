@@ -2,6 +2,7 @@
 import json
 import uuid
 import time
+import random
 import requests
 from config import Config
 
@@ -92,17 +93,27 @@ class SupabaseDB:
 
         return score_data, None
 
-    # Questions & Content
-    def get_quiz_questions(self):
+    # Questions & Content — Random Shuffle & Sampling
+    def get_quiz_questions(self, limit=10):
         if self.is_configured:
             res = self._req("GET", "quiz_questions")
-            return res if res is not None else []
+            if res and isinstance(res, list):
+                if limit is not None:
+                    questions = res.copy()
+                    random.shuffle(questions)
+                    return questions[:limit]
+                return res
         return []
 
-    def get_logo_questions(self):
+    def get_logo_questions(self, limit=10):
         if self.is_configured:
             res = self._req("GET", "logo_questions")
-            return res if res is not None else []
+            if res and isinstance(res, list):
+                if limit is not None:
+                    questions = res.copy()
+                    random.shuffle(questions)
+                    return questions[:limit]
+                return res
         return []
 
     # Leaderboard & Admin
@@ -110,9 +121,7 @@ class SupabaseDB:
         if not self.is_configured:
             return []
 
-        # Fetch all registered participants
         participants = self._req("GET", "participants", params={"order": "created_at.desc"}) or []
-        # Fetch all submitted scores
         scores = self._req("GET", "scores") or []
         scores_map = {s["participant_uuid"]: s for s in scores}
 
@@ -133,7 +142,6 @@ class SupabaseDB:
                 "created_at": score_rec["created_at"] if score_rec else p.get("created_at", "")
             })
 
-        # Sort: Completed high scores first, then recent registrations
         result.sort(key=lambda x: (x["completed"], x["score"]), reverse=True)
         return result
 
