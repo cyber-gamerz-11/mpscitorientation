@@ -5,12 +5,11 @@ from db import db
 import functools
 import os
 import uuid
+import base64
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.config.from_object(Config)
 
-UPLOAD_FOLDER = os.path.join(app.static_folder, 'uploads', 'logos')
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'svg', 'webp', 'gif'}
 
 def allowed_file(filename):
@@ -194,26 +193,34 @@ def admin_add_logo():
     prompt = request.form.get('prompt', '').strip()
     correct_logo = request.form.get('correct_logo', 'A').strip().upper()
     
+    url_a = request.form.get('logo_a_url', '').strip()
+    url_b = request.form.get('logo_b_url', '').strip()
+
     file_a = request.files.get('logo_a_file')
     file_b = request.files.get('logo_b_file')
 
-    if not prompt or not file_a or not file_b:
-        return jsonify({"error": "Prompt, Logo A file, and Logo B file are required"}), 400
+    # Base64 Encode Logo A if file provided
+    if file_a and file_a.filename:
+        if not allowed_file(file_a.filename):
+            return jsonify({"error": "Invalid image format for Logo A"}), 400
+        bytes_a = file_a.read()
+        ext_a = file_a.filename.rsplit('.', 1)[1].lower() if '.' in file_a.filename else 'png'
+        mime_a = f'image/{ext_a}' if ext_a != 'svg' else 'image/svg+xml'
+        b64_a = base64.b64encode(bytes_a).decode('utf-8')
+        url_a = f"data:{mime_a};base64,{b64_a}"
 
-    if not allowed_file(file_a.filename) or not allowed_file(file_b.filename):
-        return jsonify({"error": "Invalid image file format. Allowed: PNG, JPG, JPEG, SVG, WEBP"}), 400
+    # Base64 Encode Logo B if file provided
+    if file_b and file_b.filename:
+        if not allowed_file(file_b.filename):
+            return jsonify({"error": "Invalid image format for Logo B"}), 400
+        bytes_b = file_b.read()
+        ext_b = file_b.filename.rsplit('.', 1)[1].lower() if '.' in file_b.filename else 'png'
+        mime_b = f'image/{ext_b}' if ext_b != 'svg' else 'image/svg+xml'
+        b64_b = base64.b64encode(bytes_b).decode('utf-8')
+        url_b = f"data:{mime_b};base64,{b64_b}"
 
-    fname_a = f"logo_a_{uuid.uuid4().hex[:8]}_{secure_filename(file_a.filename)}"
-    fname_b = f"logo_b_{uuid.uuid4().hex[:8]}_{secure_filename(file_b.filename)}"
-
-    path_a = os.path.join(UPLOAD_FOLDER, fname_a)
-    path_b = os.path.join(UPLOAD_FOLDER, fname_b)
-
-    file_a.save(path_a)
-    file_b.save(path_b)
-
-    url_a = f"/static/uploads/logos/{fname_a}"
-    url_b = f"/static/uploads/logos/{fname_b}"
+    if not prompt or not url_a or not url_b:
+        return jsonify({"error": "Prompt and image files (or URLs) for Logo A and Logo B are required"}), 400
 
     q = db.add_logo_question(prompt, url_a, url_b, correct_logo)
     return jsonify({"success": True, "question": q})
